@@ -154,23 +154,31 @@ return {
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-    'folke/tokyonight.nvim',
-    lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
+  --   'folke/tokyonight.nvim',
+  --   lazy = false, -- make sure we load this during startup if it is your main colorscheme
+  --   priority = 1000, -- make sure to load this before all the other start plugins
+  --   config = function()
+  --     -- Load the colorscheme here
+  --     vim.cmd.colorscheme 'tokyonight-night'
+  --
+  --     -- You can configure highlights by doing something like
+  --     vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
+  {
+    'eldritch-theme/eldritch.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {},
     config = function()
-      -- Load the colorscheme here
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like
-      vim.cmd.hi 'Comment gui=none'
+      vim.cmd [[colorscheme eldritch]]
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -252,38 +260,42 @@ return {
 
   'windwp/nvim-ts-autotag',
 
+  -- Git plugin
+  { 'tpope/vim-fugitive' },
+
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v3.x',
+    'kdheepak/lazygit.nvim',
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    keys = {
+      { '<leader>tg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+    },
+    -- optional for floating window border decoration
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-    },
-    lazy = false,
-    keys = {
-      { '<leader>tt', '<cmd>Neotree<cr><cmd>Neotree<cr>', desc = 'Neotree' },
-      { '<leader>tg', '<cmd>Neotree git_status<cr><cmd>Neotree git_status<cr>', desc = 'Neotree git status' },
-      { '<leader>tb', '<cmd>Neotree buffers<cr><cmd>Neotree buffers<cr>', desc = 'Neotree buffers' },
-    },
-    opts = {
-      window = {
-        position = 'right',
-      },
-      filesystem = {
-        follow_current_file = {
-          enabled = true,
-        },
-      },
-      default_component_configs = {
-        name = {
-          trailing_slash = true,
-        },
-      },
     },
   },
 
-  -- Git plugin
-  'tpope/vim-fugitive',
+  {
+    'ThePrimeagen/refactoring.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('refactoring').setup()
+
+      -- load refactoring Telescope extension
+      require('telescope').load_extension 'refactoring'
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rr', function()
+        require('telescope').extensions.refactoring.refactors()
+      end)
+    end,
+  },
 }

@@ -2,6 +2,8 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+require 'neovide'
+
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
 
@@ -56,10 +58,11 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 8
 
 -- Enable softwrap
-vim.opt.wrap = true
+vim.opt.wrap = false
+vim.opt.sidescrolloff = 8
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
